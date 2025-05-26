@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRYSON REACTION BOOSTER</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        
+        h1 {
+            color: #1877f2;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #1877f2;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #166fe5;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #65676b;
+            font-size: 14px;
+        }
+        
+        .progress-container {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #e4e6eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #42b72a;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .status {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #65676b;
+        }
+        
+        .reactions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .reaction {
+            cursor: pointer;
+            text-align: center;
+            padding: 10px;
+            border-radius: 50%;
+            transition: transform 0.2s;
+            font-size: 24px;
+        }
+        
+        .reaction:hover {
+            transform: scale(1.2);
+        }
+        
+        .reaction.selected {
+            background-color: #e7f3ff;
+        }
+        
+        .reaction-label {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #65676b;
+        }
+        
+        .prank-reveal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 100;
+            color: white;
+            text-align: center;
+            padding-top: 20%;
+            font-size: 24px;
+            animation: rainbow 2s linear infinite;
+        }
+        
+        @keyframes rainbow {
+            0% { color: red; }
+            14% { color: orange; }
+            28% { color: yellow; }
+            42% { color: lime; }
+            57% { color: blue; }
+            71% { color: indigo; }
+            85% { color: violet; }
+            100% { color: red; }
+        }
+        
+        .prank-emoji {
+            font-size: 100px;
+            margin-bottom: 30px;
+            animation: bounce 0.5s alternate infinite;
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <h1>BRYSON REACTION BOOSTER</h1>
+    
+    <div class="container">
+        <div class="section">
+            <div class="section-title">POST LINK:</div>
+            <input type="text" id="url" placeholder="🌐 Enter Facebook post URL...">
+        </div>
+        
+        <div class="section">
+            <div class="section-title">REACTION:</div>
+            <div class="reactions">
+                <div class="reaction" data-reaction="like">
+                    <div>👍</div>
+                    <div class="reaction-label">Like</div>
+                </div>
+                <div class="reaction" data-reaction="love">
+                    <div>❤️</div>
+                    <div class="reaction-label">Love</div>
+                </div>
+                <div class="reaction" data-reaction="haha">
+                    <div>😂</div>
+                    <div class="reaction-label">Haha</div>
+                </div>
+                <div class="reaction" data-reaction="wow">
+                    <div>😲</div>
+                    <div class="reaction-label">Wow</div>
+                </div>
+                <div class="reaction" data-reaction="sad">
+                    <div>😢</div>
+                    <div class="reaction-label">Sad</div>
+                </div>
+                <div class="reaction" data-reaction="angry">
+                    <div>😠</div>
+                    <div class="reaction-label">Angry</div>
+                </div>
+            </div>
+            <input type="hidden" id="reaction" value="">
+        </div>
+        
+        <div class="section">
+            <div class="section-title">REACTION LIMIT:</div>
+            <input type="number" id="limit" placeholder="🔢 Number of reactions" min="1" max="100">
+        </div>
+        
+        <div class="section">
+            <div class="section-title">DELAY (ms):</div>
+            <input type="number" id="delay" placeholder="⏱️ Processing delay" min="100" max="5000" value="1000">
+        </div>
+        
+        <button id="boost">🚀 BOOST NOW</button>
+        
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="status" id="status">Initializing reaction service...</div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>RELAX KR MUNG 😜</p>
+        <p>Bryson Reaction Booster | All Rights Reserved</p>
+    </div>
+    
+    <div class="prank-reveal" id="prankReveal">
+        <div class="prank-emoji">🤪</div>
+        <h2>GOTCHA! PRANKED! 🤣</h2>
+        <p>This was never a real reaction booster!</p>
+        <p>We just made your computer go "brrrrr" for fun! 💻🌀</p>
+        <button onclick="document.getElementById('prankReveal').style.display='none'">😂 Click to stop laughing</button>
+    </div>
+    
+    <script>
+        // Select reaction
+        const reactions = document.querySelectorAll('.reaction');
+        const reactionInput = document.getElementById('reaction');
+        
+        reactions.forEach(reaction => {
+            reaction.addEventListener('click', () => {
+                reactions.forEach(r => r.classList.remove('selected'));
+                reaction.classList.add('selected');
+                reactionInput.value = reaction.dataset.reaction;
+            });
+        });
+        
+        // Boost button
+        const boostBtn = document.getElementById('boost');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progress');
+        const statusText = document.getElementById('status');
+        
+        boostBtn.addEventListener('click', () => {
+            const url = document.getElementById('url').value;
+            const reaction = reactionInput.value;
+            const limit = parseInt(document.getElementById('limit').value);
+            const delay = parseInt(document.getElementById('delay').value);
+            
+            if (!url || !reaction || !limit || !delay) {
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            if (limit > 100) {
+                alert('Maximum limit is 100!');
+                return;
+            }
+            
+            // Show progress
+            progressContainer.style.display = 'block';
+            boostBtn.disabled = true;
+            
+            // Simulate boosting
+            let count = 0;
+            const total = limit;
+            
+            const boostInterval = setInterval(() => {
+                count++;
+                const percent = Math.floor((count / total) * 100);
+                
+                progressBar.style.width = `${percent}%`;
+                statusText.textContent = `Processing... ${count}/${total} ${reaction} reactions (${percent}%)`;
+                
+                if (count >= total) {
+                    clearInterval(boostInterval);
+                    statusText.textContent = `Boost complete! ${total} ${reaction} reactions processed.`;
+                    boostBtn.disabled = false;
+                    
+                    // Show hilarious prank reveal
+                    setTimeout(() => {
+                        document.getElementById('prankReveal').style.display = 'block';
+                        
+                        // Play funny sound if possible
+                        try {
+                            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3');
+                            audio.volume = 0.3;
+                            audio.play();
+                        } catch(e) {
+                            console.log("No sound, but still funny!");
+                        }
+                    }, 1000);
+                }
+            }, delay);
+        });
+    </script>
+</body>
+</html>
